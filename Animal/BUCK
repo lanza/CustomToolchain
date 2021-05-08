@@ -1,0 +1,19 @@
+
+cxx_library(
+    name="Animal",
+    srcs=[
+        "Animal.cpp",
+        "Dog.cpp",
+        "Cat.cpp",
+    ],
+    link_style = "shared",
+    preferred_linkage = "shared",
+    headers = [
+        "Animal.h",
+        "Dog.h",
+        "Cat.h",
+    ],
+    deps = [
+        "//:muffin"
+    ]
+)
