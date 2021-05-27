@@ -1,0 +1,42 @@
+
+def muffin_binary(
+    name,
+    srcs,
+    deps,
+):
+            # "$(exe fbsource//xplat/configurations/buck/verify_queried_targets_empty:verify_queried_targets_empty) "
+            # + "$(@query_targets \"kind('^cxx_library$', deps({target})) "
+            # + "- attrregexfilter(labels, '^({filters})$', kind('^cxx_library$', deps({target})))\") "
+            # + '"{package}:{name} contains cxx_library deps that are do not use '
+            # + "fb_xplat_cxx_library. All deps MUST use fb_xplat_cxx_library to "
+            # + 'ensure compiler flags are consistent. Incorrect targets:" '
+            # + "> $OUT"
+
+    genrule(
+        name=name + "_verify_cxx",
+        cmd=(
+            "echo $(@query_targets \"kind('^cxx_preprocess_and_compile$', deps('//SomeExe:someexe'))\") > $OUT"
+        ),
+        out="result",
+        visibility=["PUBLIC"],
+    )
+
+    cxx_binary(
+        name=name,
+        srcs=srcs,
+        deps=deps,
+    )
+
+
+muffin_binary(
+    name = "someexe",
+    srcs = [
+        "SomeExe.cpp",
+    ],
+    deps = [
+        "//:my_toolchain",
+        "//SomeLib:somelib",
+        "//SomeLib:other"
+    ]
+)
+

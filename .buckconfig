@@ -5,7 +5,10 @@
   mode = dir
 
 [cxx#macosx-x86_64]
-  toolchain_target = //:muffin_toolchain
+  toolchain_target = //:my_toolchain
+
+[cxx#macosx-arm64]
+  toolchain_target = //:my_toolchain
 
 [cxx]
   default_platform = macosx-x86_64
@@ -16,9 +19,6 @@
   sdk_path = /opt/android/sdk_D23134735/
   target = Google Inc.:Google APIs:23
 
-[cxx#android-armv7]
-  toolchain_target = //:muffin_toolchain
-
 [ndk]
   app_platform = android-21
   compiler = clang
@@ -27,7 +27,8 @@
     arm64=>//mdk, \
     armv7=>//mdk
   ndk_target_per_cpu_abi = \
+    arm64=>//mdk, \
     armv7=>//mdk
   ndk_target = //mdk
-  #ndk_path = /opt/android_ndk/r17fb2
-  #ndk_version = 17.2
+  ndk_path = /opt/android_ndk/r17fb2
+  ndk_version = 17.2
