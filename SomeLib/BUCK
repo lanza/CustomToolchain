@@ -8,75 +8,69 @@ def muffin_library(
     soname,
     exported_headers,
     deps,
-):
-            # "$(exe fbsource//xplat/configurations/buck/verify_queried_targets_empty:verify_queried_targets_empty) "
-            # + "$(@query_targets \"kind('^cxx_library$', deps({target})) "
-            # + "- attrregexfilter(labels, '^({filters})$', kind('^cxx_library$', deps({target})))\") "
-            # + '"{package}:{name} contains cxx_library deps that are do not use '
-            # + "fb_xplat_cxx_library. All deps MUST use fb_xplat_cxx_library to "
-            # + 'ensure compiler flags are consistent. Incorrect targets:" '
-            # + "> $OUT"
+    **kwargs):
+    # "$(exe fbsource//xplat/configurations/buck/verify_queried_targets_empty:verify_queried_targets_empty) "
+    # + "$(@query_targets \"kind('^cxx_library$', deps({target})) "
+    # + "- attrregexfilter(labels, '^({filters})$', kind('^cxx_library$', deps({target})))\") "
+    # + '"{package}:{name} contains cxx_library deps that are do not use '
+    # + "fb_xplat_cxx_library. All deps MUST use fb_xplat_cxx_library to "
+    # + 'ensure compiler flags are consistent. Incorrect targets:" '
+    # + "> $OUT"
 
     genrule(
-        name=name + "_verify_cxx",
-        cmd=(
-            "echo $(@query_targets \"kind('^cxx_library$', deps('//Animal:Animal'))\") > $OUT"
-        ).format(
-            name=name,
-            package=name,
-            filters="|".join(["muffin", "riley"]),
-        ),
-        out="result",
-        visibility=["PUBLIC"],
+        name = name + "_verify_cxx",
+        cmd = "echo $(@query_targets \"kind('^cxx_library$', deps('//Animal:Animal'))\") > $OUT",
+        out = "result",
+        visibility = ["PUBLIC"],
     )
 
     cxx_library(
-        name=name,
-        srcs=srcs,
-        visibility=visibility,
-        link_style=link_style,
-        preferred_linkage=preferred_linkage,
-        header_namespace=header_namespace,
-        soname=soname,
-        exported_headers=exported_headers,
-        deps=deps,
+        name = name,
+        srcs = srcs,
+        visibility = visibility,
+        link_style = link_style,
+        preferred_linkage = preferred_linkage,
+        header_namespace = header_namespace,
+        soname = soname,
+        exported_headers = exported_headers,
+        deps = deps,
     )
 
 
 muffin_library(
-    name="somelib",
-    srcs=[
+    name = "somelib",
+    srcs = [
         "Animal.cpp",
         "Dog.cpp",
         "Cat.cpp",
     ],
-    visibility=["PUBLIC"],
-    link_style="shared",
-    preferred_linkage="shared",
-    header_namespace="Animal",
-    soname="libSomeLib.dylib",
-    exported_headers=[
+    visibility = ["PUBLIC"],
+    link_style = "shared",
+    preferred_linkage = "shared",
+    header_namespace = "Animal",
+    soname = "libSomeLib.dylib",
+    exported_headers = [
         "Animal.h",
         "Dog.h",
         "Cat.h",
     ],
-    deps=[
+    deps = [
         ":other",
     ],
 )
 
 muffin_library(
-    name="other",
-    srcs=[
+    name = "other",
+    srcs = [
         "Other.cpp",
     ],
-    visibility=["PUBLIC"],
-    link_style="shared",
-    preferred_linkage="shared",
-    header_namespace="Other",
-    soname="libOther.dylib",
-    exported_headers=[
+    visibility = ["PUBLIC"],
+    link_style = "shared",
+    preferred_linkage = "shared",
+    header_namespace = "Other",
+    soname = "libOther.dylib",
+    exported_headers = [
         "Other.h",
     ],
-    deps=[],
+    deps = [],
 )
